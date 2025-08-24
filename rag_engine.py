@@ -4,11 +4,6 @@ from vector_store import VectorStore
 from config import Config
 
 class RAGEngine:
-    def __init__(self, vector_store: VectorStore):
-        self.vector_store = vector_store
-
-        genai.configure(api_key=Config.GEMINI_API_KEY) # type: ignore
-        self.model = genai.GenerativeModel('gemini-2.0-flash-lite') # type: ignore
 
     def generate_answer(self, query: str, top_k: int = 5) -> Dict[str, Any]:
         """Generate answer using RAG pipeline."""
