@@ -4,6 +4,11 @@ from vector_store import VectorStore
 from config import Config
 
 class RAGEngine:
+    def __init__(self, vector_store: VectorStore):
+        self.vector_store = vector_store
+
+        genai.configure(api_key=Config.GEMINI_API_KEY) # type: ignore
+        self.model = genai.GenerativeModel('gemini-2.0-flash-lite') # type: ignore
 
     def generate_answer(self, query: str, top_k: int = 5) -> Dict[str, Any]:
         """Generate answer using RAG pipeline."""
@@ -53,19 +58,15 @@ class RAGEngine:
     def _create_prompt(self, query: str, context: str) -> str:
         """Create a prompt for the language model."""
         prompt = f"""You are an AI assistant that answers questions based on provided document context.
-
                     Instructions:
                     1. Answer the question using ONLY the information provided in the context below
                     2. If the context doesn't contain enough information to answer the question, say so clearly
                     3. Be concise but comprehensive in your answer
                     4. If you reference specific information, mention which context section it comes from
                     5. Do not make up information that's not in the provided context
-
                     Context from documents:
                     {context}
-
                     Question: {query}
-
                     Answer:"""
 
         return prompt
